@@ -2,24 +2,6 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { Schema } = mongoose;
 
-const itemSchema = new Schema({
-	name: {
-		type: String,
-		required: true,
-	},
-	category: {
-		enum: [],
-	},
-	price: {
-		type: Number,
-		required: true,
-	},
-	picture: {
-		type: String,
-		required: true,
-	},
-});
-
 const userSchema = new Schema({
 	name: {
 		type: String,
@@ -33,8 +15,6 @@ const userSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	itemsOnSale: [itemSchema],
-	itemsPurchased: [itemSchema],
 });
 
 userSchema.methods.generateAuthToken = function () {
