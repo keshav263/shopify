@@ -4,4 +4,5 @@ const router = Router();
 
 router.post("/sign-up", emailSignUp);
 router.post("/sign-in", emailSignIn);
+
 module.exports = router;
