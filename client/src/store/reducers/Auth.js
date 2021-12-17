@@ -1,0 +1,46 @@
+import {
+	AUTHENTICATE_USER,
+	LOG_OUT,
+	SET_DID_TRY_AUTOLOGIN,
+} from "../actions/Auth";
+
+const initialState = {
+	userId: "",
+	name: "",
+	email: "",
+	itemsOnSale: [],
+	itemsBought: [],
+	isAuth: false,
+	token: "",
+	setDidTryAutoLogin: false,
+};
+
+export default function AuthReducer(state = initialState, action) {
+	switch (action.type) {
+		case SET_DID_TRY_AUTOLOGIN: {
+			return {
+				...state,
+				setDidTryAutoLogin: true,
+			};
+		}
+		case AUTHENTICATE_USER: {
+			return {
+				...state,
+				userId: action.payload.userId,
+				setDidTryAutoLogin: true,
+				name: action.payload.name,
+				isAuth: true,
+				email: action.payload.email,
+				itemsBought: action.payload.itemsBought,
+				itemsOnSale: action.payload.itemsOnSale,
+				token: action.payload.token,
+			};
+		}
+		case LOG_OUT: {
+			return initialState;
+		}
+		default: {
+			return state;
+		}
+	}
+}
