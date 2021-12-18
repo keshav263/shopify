@@ -11,7 +11,9 @@ import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import { useNavigate } from "react-router-dom";
 export default function AdditemScreen() {
+	const navigate = useNavigate();
 	const fileRef = useRef();
 	const [picture, setPicture] = useState();
 	const [price, setPrice] = useState("");
@@ -35,7 +37,7 @@ export default function AdditemScreen() {
 		};
 		try {
 			const S3Client = new S3(config);
-			const data = await S3Client.uploadFile(file, "xyz.jpg");
+			const data = await S3Client.uploadFile(file, JSON.stringify(Date.now));
 			console.log(data);
 			if (data.status === 204) {
 				setPicture(data.location);
@@ -49,6 +51,7 @@ export default function AdditemScreen() {
 
 	const onSubmit = async () => {
 		await dispatch(itemActions.addItem(token, price, name, picture, category));
+		navigate("/home");
 	};
 
 	return (

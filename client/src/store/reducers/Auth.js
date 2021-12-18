@@ -3,6 +3,7 @@ import {
 	LOG_OUT,
 	SET_DID_TRY_AUTOLOGIN,
 } from "../actions/Auth";
+import { GET_ALL_ITEMS } from "../actions/Item";
 
 const initialState = {
 	userId: "",
@@ -10,6 +11,7 @@ const initialState = {
 	email: "",
 	itemsOnSale: [],
 	itemsBought: [],
+	allItems: [],
 	isAuth: false,
 	token: "",
 	setDidTryAutoLogin: false,
@@ -34,6 +36,12 @@ export default function AuthReducer(state = initialState, action) {
 				itemsBought: action.payload.itemsBought,
 				itemsOnSale: action.payload.itemsOnSale,
 				token: action.payload.token,
+			};
+		}
+		case GET_ALL_ITEMS: {
+			return {
+				...state,
+				allItems: action.payload,
 			};
 		}
 		case LOG_OUT: {

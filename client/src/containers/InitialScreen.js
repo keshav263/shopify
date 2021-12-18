@@ -11,8 +11,7 @@ export default function InitialScreen(props) {
 	const checkAutoLogIn = useCallback(async () => {
 		try {
 			if (auth.token) await dispatch(authActions.autoLogin(auth.token));
-
-			navigate("/home");
+			else navigate("/authenticate");
 		} catch (error) {
 			dispatch(authActions.setDidTryAutoLogin());
 			navigate("/home");

@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import CoverPic from "../assets/cover.png";
 import { Button } from "@mui/material";
 import Header from "../components/Header";
 import { FaLeaf, FaSyringe } from "react-icons/fa";
 import { GiLeafSwirl } from "react-icons/gi";
+import * as itemActions from "../store/actions/Item";
+import { useDispatch, useSelector } from "react-redux";
 export default function HomeScreen() {
+	const dispatch = useDispatch();
+	const auth = useSelector((state) => state.Auth);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	useEffect(async () => {
+		await dispatch(itemActions.getAllItems(auth.token));
+	}, [dispatch, auth.token]);
 	return (
 		<Container>
 			<Header />

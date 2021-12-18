@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { Button } from "@mui/material";
 export default function Header() {
+	const navigate = useNavigate();
 	return (
 		<Container>
 			<div>
@@ -27,7 +28,7 @@ export default function Header() {
 			>
 				<StyledLink to="/">Home</StyledLink>
 
-				<StyledLink to="/">Store</StyledLink>
+				<StyledLink to="/store">Store</StyledLink>
 				<StyledLink
 					style={{ color: "#638243", transform: "scale(1.5)" }}
 					to="/add-item"
@@ -38,7 +39,10 @@ export default function Header() {
 				<StyledLink to="/">About Us</StyledLink>
 			</div>
 			<div>
-				<PersonOutlineIcon />
+				<PersonOutlineIcon
+					style={{ cursor: "pointer" }}
+					onClick={() => navigate("/profile")}
+				/>
 			</div>
 		</Container>
 	);

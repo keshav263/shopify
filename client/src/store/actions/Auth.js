@@ -9,6 +9,58 @@ export const setDidTryAutoLogin = () => {
 	};
 };
 
+export const signUp = (email, password, name) => {
+	return async (dispatch) => {
+		try {
+			const response = await axios.post("/auth/sign-up", {
+				email,
+				password,
+				name,
+			});
+			dispatch({ type: AUTHENTICATE_USER, payload: response.data });
+			dispatch({
+				type: AUTHENTICATE_USER,
+				payload: {
+					userId: response.data._id,
+					name: response.data.name,
+					itemsOnSale: response.data.itemsOnSale,
+					token: response.data.token,
+					itemsBought: response.data.itemsBought,
+					email: response.data.email,
+				},
+			});
+		} catch (error) {
+			console.log(error);
+			throw new Error();
+		}
+	};
+};
+
+export const signIn = (email, password) => {
+	return async (dispatch) => {
+		try {
+			const response = await axios.post("/auth/sign-in", {
+				email,
+				password,
+			});
+			dispatch({
+				type: AUTHENTICATE_USER,
+				payload: {
+					userId: response.data._id,
+					name: response.data.name,
+					itemsOnSale: response.data.itemsOnSale,
+					token: response.data.token,
+					itemsBought: response.data.itemsBought,
+					email: response.data.email,
+				},
+			});
+		} catch (error) {
+			console.log(error);
+			throw new Error();
+		}
+	};
+};
+
 export const autoLogin = (token) => {
 	return async (dispatch) => {
 		try {
@@ -25,11 +77,11 @@ export const autoLogin = (token) => {
 				type: AUTHENTICATE_USER,
 				payload: {
 					userId: response.data._id,
-					firstName: response.data.name,
-					lastName: response.data.itemsOnSale,
+					name: response.data.name,
+					itemsOnSale: response.data.itemsOnSale,
 					token,
-					username: response.data.itemsBought,
-					provider: response.data.email,
+					email: response.data.email,
+					itemsBought: response.data.itemsBought,
 				},
 			});
 		} catch (error) {

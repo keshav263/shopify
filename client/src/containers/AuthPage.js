@@ -1,12 +1,28 @@
 import { TextField, Button } from "@mui/material";
 import React, { useState } from "react";
-
+import * as authActions from "../store/actions/Auth";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 export default function AuthPage() {
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const [isLoggingIn, setIsLoggingIn] = useState(false);
+	const onSubmit = async () => {
+		try {
+			if (isLoggingIn) {
+				await dispatch(authActions.signIn(email, password));
+				navigate("/home");
+			} else {
+				await dispatch(authActions.signUp(email, password, name));
+			}
+		} catch (error) {
+			alert(error.message);
+		}
+	};
 	return (
 		<Container>
 			<Left>
@@ -54,7 +70,9 @@ export default function AuthPage() {
 					type="password"
 					variant="outlined"
 				/>
-				<StyledButton variant="contained">Sign up</StyledButton>
+				<StyledButton onClick={onSubmit} variant="contained">
+					Log in
+				</StyledButton>
 				{isLoggingIn ? (
 					<p>
 						Don't have an account?{" "}
