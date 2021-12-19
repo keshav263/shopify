@@ -46,6 +46,8 @@ const Container = styled.div`
 	width: 100vw;
 	height: 100vh;
 	overflow-y: scroll;
+	box-sizing: border-box;
+	overflow-x: hidden;
 	padding-bottom: 5rem;
 	padding-left: 5rem;
 	background: linear-gradient(to right, #f8ebd5 40%, #f9f2e2 20%);
@@ -63,4 +65,5 @@ const SubTitle = styled.h3`
 
 const List = styled.div`
 	display: flex;
+	overflow-x: scroll;
 `;

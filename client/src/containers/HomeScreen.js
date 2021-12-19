@@ -7,6 +7,7 @@ import { FaLeaf, FaSyringe } from "react-icons/fa";
 import { GiLeafSwirl } from "react-icons/gi";
 import * as itemActions from "../store/actions/Item";
 import { useDispatch, useSelector } from "react-redux";
+import { device } from "../device";
 export default function HomeScreen() {
 	const dispatch = useDispatch();
 	const auth = useSelector((state) => state.Auth);
@@ -21,7 +22,7 @@ export default function HomeScreen() {
 				<Col>
 					<CoverPicture src={CoverPic} />
 				</Col>
-				<Col style={{ width: "35%" }}>
+				<MainCol>
 					<Title>Muse + Metta</Title>
 					<Description>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -30,7 +31,7 @@ export default function HomeScreen() {
 						aliquip ex ea commodo consequat. Duis aute irure dolor in
 					</Description>
 					<StyledButton variant="contained">Buy now</StyledButton>
-					<Row
+					{/* <Row
 						style={{
 							justifyContent: "space-between",
 							position: "relative",
@@ -50,8 +51,8 @@ export default function HomeScreen() {
 							<SubTitle>Volume</SubTitle>
 							<Text>475 ml</Text>
 						</Col>
-					</Row>
-				</Col>
+					</Row> */}
+				</MainCol>
 			</Row>
 			<Section>
 				<h4>About</h4>
@@ -137,6 +138,9 @@ const WhyContainer = styled.section`
 		font-family: "Playfair Display", serif;
 		letter-spacing: 0.1rem;
 		margin-bottom: 0;
+		@media ${device.tablet} {
+			font-size: 1.5rem;
+		}
 	}
 	> p {
 		margin-top: 1rem;
@@ -145,12 +149,19 @@ const WhyContainer = styled.section`
 
 		text-transform: capitalize;
 		text-align: center;
+		@media ${device.tablet} {
+			font-size: 0.9rem;
+		}
 	}
 	> div {
 		display: flex;
 		justify-content: space-between;
 		width: 60vw;
 		margin-top: 3rem;
+		@media ${device.tablet} {
+			width: 80vw;
+			flex-direction: column;
+		}
 
 		> section {
 			display: flex;
@@ -173,18 +184,28 @@ const Section = styled.section`
 		color: #638243;
 		letter-spacing: 0.1rem;
 		margin-bottom: 0;
+		@media ${device.tablet} {
+			font-size: 1rem;
+		}
 	}
 	> p {
 		margin-top: 0;
 		font-family: "Playfair Display", serif;
 		text-transform: capitalize;
 		font-size: 3rem;
+		width: 80vw;
 		text-align: center;
+		@media ${device.tablet} {
+			font-size: 2rem;
+		}
 	}
 	> div {
 		display: flex;
 		justify-content: space-between;
 		width: 80vw;
+		@media ${device.tablet} {
+			flex-direction: column;
+		}
 
 		> section {
 			display: flex;
@@ -208,6 +229,12 @@ const Count = styled.p`
 	> span {
 		color: #638243;
 	}
+	@media ${device.tablet} {
+		font-size: 6vw;
+	}
+	@media ${device.mobileM} {
+		font-size: 1.5rem;
+	}
 `;
 
 const Container = styled.div`
@@ -217,23 +244,44 @@ const Container = styled.div`
 `;
 
 const CoverPicture = styled.img`
-	height: 100vh;
+	height: 60vw;
 `;
 
 const Row = styled.div`
 	display: flex;
 	align-items: center;
+	@media ${device.laptop} {
+		/* align-items: flex-end; */
+	}
+	@media ${device.tablet} {
+		flex-direction: column-reverse;
+		align-items: center;
+		padding-top: 10%;
+	}
 `;
 const Col = styled.div``;
-
+const MainCol = styled(Col)`
+	width: 35%;
+	@media ${device.tablet} {
+		width: 60%;
+	}
+`;
 const Title = styled.h1`
 	color: #638243;
-	font-size: 4rem;
+	font-size: 5vw;
 	font-family: "Playfair Display", serif;
+	@media ${device.mobileL} {
+		font-size: 1.5rem;
+		margin-top: 5rem;
+	}
 `;
 
 const Description = styled.p`
 	line-height: 1.5;
+	@media ${device.laptop} {
+		font-size: 0.8rem;
+		line-height: 1.3;
+	}
 `;
 
 const StyledButton = styled(Button)`
