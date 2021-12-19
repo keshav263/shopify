@@ -10,13 +10,19 @@ export default function InitialScreen(props) {
 	const navigate = useNavigate();
 	const checkAutoLogIn = useCallback(async () => {
 		try {
-			if (auth.token) await dispatch(authActions.autoLogin(auth.token));
-			else navigate("/authenticate");
+			if (auth.token) {
+				const response = await dispatch(authActions.autoLogin(auth.token));
+				if (response) {
+					navigate("/authenticate");
+				} else {
+					navigate("/home");
+				}
+			} else return navigate("/authenticate");
 		} catch (error) {
-			dispatch(authActions.setDidTryAutoLogin());
-			navigate("/home");
+			navigate("/authenticate");
 		}
 	}, [navigate, dispatch, auth.token]);
+
 	useEffect(() => {
 		checkAutoLogIn();
 	}, [checkAutoLogIn]);

@@ -3,12 +3,13 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import * as itemActions from "../store/actions/Item";
 import { useDispatch } from "react-redux";
 export default function ItemScreen() {
 	const allItems = useSelector((state) => state.Auth.allItems);
 	const token = useSelector((state) => state.Auth.token);
+	const [isLoading, setIsLoading] = useState(false);
 	const [item, setItem] = useState();
 	const navigate = useNavigate();
 	const { id } = useParams();
@@ -20,10 +21,25 @@ export default function ItemScreen() {
 	}, [item, allItems, id]);
 
 	const handleClick = async () => {
+		setIsLoading(true);
 		await dispatch(itemActions.buyItem(token, item._id));
+		setIsLoading(false);
 		navigate("/home");
 	};
 
+	if (isLoading) {
+		return (
+			<Container
+				style={{
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+				}}
+			>
+				<CircularProgress />
+			</Container>
+		);
+	}
 	return (
 		<Container>
 			<Header />

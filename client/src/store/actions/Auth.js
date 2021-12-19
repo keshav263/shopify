@@ -17,7 +17,9 @@ export const signUp = (email, password, name) => {
 				password,
 				name,
 			});
-			dispatch({ type: AUTHENTICATE_USER, payload: response.data });
+			if (!response.data.success) {
+				return { message: response.data.message };
+			}
 			dispatch({
 				type: AUTHENTICATE_USER,
 				payload: {
@@ -43,6 +45,10 @@ export const signIn = (email, password) => {
 				email,
 				password,
 			});
+			if (!response.data.success) {
+				return { message: response.data.message };
+			}
+
 			dispatch({
 				type: AUTHENTICATE_USER,
 				payload: {
@@ -73,6 +79,9 @@ export const autoLogin = (token) => {
 					},
 				}
 			);
+			const { success } = response.data;
+			if (!success) return { message: response.data.message };
+			console.log(response.data);
 			dispatch({
 				type: AUTHENTICATE_USER,
 				payload: {
@@ -93,5 +102,6 @@ export const autoLogin = (token) => {
 export const logOut = () => {
 	return async (dispatch) => {
 		localStorage.clear();
+		dispatch({ type: LOG_OUT });
 	};
 };

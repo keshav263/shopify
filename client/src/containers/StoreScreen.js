@@ -19,22 +19,25 @@ export default function StoreScreen() {
 			<SubTitle>Men</SubTitle>
 			<List>
 				{auth.allItems.map((item) => {
-					if (item.category === "Men")
+					if (item.category === "Men" && item.sold === false)
 						return <Item key={item._id} item={item} />;
+					return <div></div>;
 				})}
 			</List>
 			<SubTitle>Women</SubTitle>
 			<List>
 				{auth.allItems.map((item) => {
-					if (item.category === "Women")
+					if (item.category === "Women" && item.sold === false)
 						return <Item key={item._id} item={item} />;
+					return <div></div>;
 				})}
 			</List>
 			<SubTitle>Kids</SubTitle>
 			<List>
 				{auth.allItems.map((item) => {
-					if (item.category === "Kids")
+					if (item.category === "Kids" && item.sold === false)
 						return <Item key={item._id} item={item} />;
+					return <div></div>;
 				})}
 			</List>
 		</Container>
@@ -43,13 +46,19 @@ export default function StoreScreen() {
 
 const List = styled.div`
 	display: flex;
+
 	margin-left: 5rem;
+
+	overflow-x: scroll;
+	overflow-y: visible;
+	flex-direction: row;
+	align-items: center;
 `;
 
 const Container = styled.div`
-	height: 100vh;
-	width: 100vw;
 	background: linear-gradient(to right, #f8ebd5 40%, #f9f2e2 20%);
+	padding-bottom: 5rem;
+	height: 100%;
 `;
 
 const Title = styled.h1`

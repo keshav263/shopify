@@ -2,43 +2,53 @@ import { Button } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-export default function Item({ item }) {
+export default function Item({ item, bought }) {
 	const navigate = useNavigate();
 	return (
 		<Container>
-			<Image src={item.picture} alt="item picture" />
 			<div>
-				<p>{item.name}</p>
-				<p className="price">Rs. {item.price}</p>
+				<Image src={item.picture} alt="item picture" />
+				<div>
+					<p>{item.name}</p>
+					<p className="price">Rs. {item.price}</p>
 
-				<StyledButton
-					onClick={() => navigate(`/item/${item._id}`)}
-					variant="contained"
-				>
-					Buy now
-				</StyledButton>
+					{!bought && (
+						<StyledButton
+							onClick={() => navigate(`/item/${item._id}`)}
+							variant="contained"
+						>
+							Buy now
+						</StyledButton>
+					)}
+				</div>
 			</div>
 		</Container>
 	);
 }
 
 const Container = styled.div`
-	margin: 0;
-	margin-right: 1rem;
-	border: 1px solid #c4c4c4;
-	width: 16rem;
-	border-radius: 10px;
-	padding: 2rem;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	> div {
-		> p {
-			font-family: "Poppins";
+		margin: 0;
+		margin-right: 1rem;
+		border: 1px solid #c4c4c4;
+		box-sizing: border-box;
+		overflow-x: visible;
+		white-space: nowrap;
+		border-radius: 10px;
+		padding: 2rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		> div {
+			> p {
+				font-family: "Poppins";
+			}
+			& .price {
+				font-weight: bold;
+			}
 		}
-		& .price {
-			font-weight: bold;
-		}
+		width: 20rem;
 	}
 `;
 

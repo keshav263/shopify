@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
 import S3 from "react-aws-s3";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import * as itemActions from "../store/actions/Item";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -12,28 +12,48 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { useNavigate } from "react-router-dom";
+
+import Snackbar from "@mui/material/Snackbar";
+import Keys from "../config";
 export default function AdditemScreen() {
 	const navigate = useNavigate();
 	const fileRef = useRef();
 	const [picture, setPicture] = useState();
 	const [price, setPrice] = useState("");
 	const [name, setName] = useState("");
+	const [isLoading, setIsLoading] = useState(false);
 	const token = useSelector((state) => state.Auth.token);
 	const [category, setCategory] = useState("");
 	const dispatch = useDispatch();
+	const [open, setOpen] = React.useState(false);
+
 	const handleChange = (event) => {
 		const fileUploaded = event.target.files[0];
 		console.log(fileUploaded);
 		upload(fileUploaded);
 	};
+	const [message, setMessage] = React.useState("");
+
+	const handleClick = () => {
+		setOpen(true);
+	};
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpen(false);
+	};
+
 	const upload = async (file) => {
 		window.Buffer = window.Buffer || require("buffer").Buffer;
 		const config = {
 			bucketName: "images263",
 			dirName: "productPictures",
 			region: "us-west-1",
-			accessKeyId: "AKIA5VUWPWVJDF6CVCWL",
-			secretAccessKey: "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",
+			accessKeyId: Keys.accessKeyId,
+			secretAccessKey: Keys.secretAccessKey,
 		};
 		try {
 			const S3Client = new S3(config);
@@ -50,12 +70,44 @@ export default function AdditemScreen() {
 	};
 
 	const onSubmit = async () => {
-		await dispatch(itemActions.addItem(token, price, name, picture, category));
-		navigate("/home");
+		if (!picture || !price || !name || !category) {
+			setMessage("Enter all the details");
+			handleClick();
+			return;
+		}
+		try {
+			setIsLoading(true);
+			await dispatch(
+				itemActions.addItem(token, price, name, picture, category)
+			);
+			setIsLoading(false);
+			navigate("/home");
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
+	if (isLoading) {
+		return (
+			<Container
+				style={{
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+				}}
+			>
+				<CircularProgress />
+			</Container>
+		);
+	}
 	return (
 		<Container>
+			<Snackbar
+				open={open}
+				autoHideDuration={6000}
+				message={message}
+				onClose={handleClose}
+			></Snackbar>
 			<input
 				type="file"
 				ref={fileRef}

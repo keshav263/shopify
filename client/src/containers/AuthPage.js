@@ -1,30 +1,98 @@
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, CircularProgress } from "@mui/material";
 import React, { useState } from "react";
 import * as authActions from "../store/actions/Auth";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
 export default function AuthPage() {
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(false);
 	const [isLoggingIn, setIsLoggingIn] = useState(false);
+	const [open, setOpen] = React.useState(false);
+	const [message, setMessage] = React.useState("");
+
+	const handleClick = () => {
+		setOpen(true);
+	};
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpen(false);
+	};
+
 	const onSubmit = async () => {
 		try {
 			if (isLoggingIn) {
-				await dispatch(authActions.signIn(email, password));
-				navigate("/home");
+				if (!email || !password) {
+					setMessage("Email and password are required");
+					handleClick();
+					return;
+				}
+				setIsLoading(true);
+				const response = await dispatch(authActions.signIn(email, password));
+				setIsLoading(false);
+				if (response?.message) {
+					setMessage(response.message);
+					handleClick();
+				} else {
+					navigate("/home");
+				}
 			} else {
-				await dispatch(authActions.signUp(email, password, name));
+				if (!email || !password || !name) {
+					setMessage("Enter all the details");
+					handleClick();
+					return;
+				}
+				setIsLoading(true);
+				const response = await dispatch(
+					authActions.signUp(email, password, name)
+				);
+				setIsLoading(false);
+				if (response?.message) {
+					setMessage(response.message);
+					handleClick();
+				} else {
+					navigate("/home");
+				}
 			}
 		} catch (error) {
+			setIsLoading(false);
+			console.log(error);
+			setMessage(error.message);
+			handleClick();
 			alert(error.message);
 		}
 	};
+
+	if (isLoading) {
+		return (
+			<Container
+				style={{
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+				}}
+			>
+				<CircularProgress />
+			</Container>
+		);
+	}
 	return (
 		<Container>
+			<Snackbar
+				open={open}
+				autoHideDuration={6000}
+				message={message}
+				onClose={handleClose}
+			></Snackbar>
 			<Left>
 				<Logo
 					style={{
